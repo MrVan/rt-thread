@@ -143,7 +143,7 @@ void rt_hw_interrupt_init(void)
 	int_disable_all();
 	mask_all_int(SEP6200_FIQ_TYPE);
 
-	int_enable_all();
+	//int_enable_all();
 	unmask_all_int(SEP6200_IRQ_TYPE);
 
 	/* init interrupt nest, and context in thread sp */
