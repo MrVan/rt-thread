@@ -15,7 +15,7 @@
 #include <rthw.h>
 #include "serial.h"
 
-#if 0
+#if 1
 /**
  * @addtogroup SEP6200
  */

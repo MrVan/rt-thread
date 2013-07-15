@@ -9,13 +9,16 @@
  *
  * Change Logs:
  * Date           Author       Notes
- * 2013-03-16     van.freenix modified from sep4020    	  	
+ * 2006-03-13     Bernard      first version
+ * 2009-04-20     yi.qiu       modified according bernard's stm32 version
+ * 2010-10-6      wangmeng     added sep4020 surpport     	  	
+ * 2013-7-15      Peng Fan     Modified from sep4020    	  	
  */
 
 #ifndef __SERIAL_H__
 #define __SERIAL_H__
 
-#include "sep6200.h"
+#include <sep6200.h>
 
 #define	USTAT_RCV_READY		0x01   	/* receive data ready */ 
 #define USTAT_OVERRUN		0x02	/* overrun */

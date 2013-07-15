@@ -25,18 +25,17 @@ void rt_hw_serial_putc(const char c);
 
 struct rt_device uart0_device;
 struct serial_int_rx uart0_int_rx;
-struct serial_int_tx uart0_int_tx;
 struct serial_device uart0 =
 {
 	UART0,
 	&uart0_int_rx,
-	&uart0_int_tx,
+  RT_NULL
 };
 
 /*
  * This function will handle rtos timer
  */
-void rt_timer_handler(int vector)
+void rt_timer_handler(int vector, void *param)
 {
 	rt_uint32_t clear_int;
 
@@ -50,16 +49,23 @@ void rt_timer_handler(int vector)
 /*
  * This function will handle serial interrupt
  */
-#if 0
-void rt_serial_handler(int vector)
+#if 1
+void rt_serial_handler(int vector, void *param)
 {
 	rt_uint32_t num;
 	switch (vector) {
 		case INTSRC_UART0:
-			num = (*(RP)SEP6200_UART0_IIR >> 1) & 0x7;
-			if (!(*(RP)SEP6200_UART0_IIR & 0x1))
+
+      /*No interrupt*/
+			if ((*(RP)SEP6200_UART0_IIR & 0x1))
 				return;
-			rt_hw_serial_isr(&uart0_device);
+
+      /*Get the serial interrupt num*/
+			num = (*(RP)SEP6200_UART0_IIR >> 1) & 0x7;
+
+      /*Receive or timeout*/
+      if ((num == 6) || (num == 2)) 
+			  rt_hw_serial_isr(&uart0_device);
 			break;
 		/*1,2,3 not implemented now, do in future*/
 		case INTSRC_UART1:
@@ -96,7 +102,7 @@ void rt_hw_timer_init(void)
 /*
  * This function will init uart
  */
-#if 0
+#if 1
 #define UART_CLK 60000000UL
 void rt_hw_uart_init(void)
 {
@@ -116,7 +122,7 @@ void rt_hw_uart_init(void)
 	/* Disable tx interrupt*/
 	*(RP)(SEP6200_UART0_IER) &= ~(0x1 << 1);
 
-	rt_hw_interrupt_install(INTSRC_UART0, rt_serial_handler, RT_NULL);
+	rt_hw_interrupt_install(INTSRC_UART0, rt_serial_handler, RT_NULL, "uart0");
 	rt_hw_interrupt_umask(INTSRC_UART0);
 
 	rt_hw_serial_register(&uart0_device, "uart0", 
@@ -128,7 +134,7 @@ void rt_hw_uart_init(void)
 void rt_hw_board_init(void)
 {
   int i = 0;
-#if 0
+#if 1
 	rt_hw_uart_init();
 #endif
 	rt_hw_timer_init();
