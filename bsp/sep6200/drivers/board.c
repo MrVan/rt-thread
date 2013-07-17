@@ -138,6 +138,7 @@ void rt_hw_board_init(void)
 	rt_hw_uart_init();
 #endif
 	rt_hw_timer_init();
+  NF_ReadID();
 }
 
 /*
